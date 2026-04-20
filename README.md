@@ -9,12 +9,25 @@ A new repository for a new year. I'm going to try something new, easily adaptabl
 
 ---
 
-## SCRIPTS
+## CODE
 
-## main.rov
->
-> 
+### Computer
 
-### compiler.py
->
-> 
+#### main.rov
+- This is the main file that has the setup of the code which gets compiled into actual code.
+- 
+
+#### compiler.py
+- This compiles `.rov` files as runnable, creating objects and displaying based on what is in the passed file.
+- 
+
+---
+
+### ROV Setup
+
+#### setup.deb
+- This is the app that sets up the ROV with all the right daemons and broadcasting
+  - it sets up the:
+    - pigpio daemon
+    - mediamtx daemon
+    - ffmpeg daemon
