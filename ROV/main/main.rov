@@ -1,0 +1,40 @@
+[PI]
+ip: 10.42.0.186
+
+
+
+[DISPLAY]
+
+=MAIN=: {  // Window 1
+
+    background = dark_grey
+    size: (1000, 500)
+    resizable: true
+    
+    | `§DATA DISPLAY`                                                     |                             | `§CAMERA`                                                                             |  // ` for unseen
+    | :---                                                                | :--:                        | :--:                                                                                  |
+    | <TITLE> Connections                                                 |                             | <TITLE> Camera                                                                        |  // <> for formatting template
+    | ROV Connected: @[indicator, [red,green], circle{rovConn}]           |                             | {$(mainCamera, (854, 480), -90)}                                                      |  // $ for display, (display, size, rotation°) (480p 16:9 screen size)
+    | > Controller Connected: @[indicator, [red,green], circle{contConn}] |                             |                                                                                       |  // > for indent
+    | > Camera Connected: @[indicator, [red,green], circle{camConn}]      |                             |                                                                                       |
+    | > Gyro Connected: @[indicator, [red,green], circle{gyroConn}]       |                             |                                                                                       |
+    | > Thermo Connected: @[indicator, [red,green], circle{thermConn}]    |                             |                                                                                       |
+    | <ERROR> Leak#[{leak}, color=(red,grey)]                             | <TITLE> Outputs             |                                                                                       |  // # for formatting specifics given inputs
+    |                                                                     | {NW: .2f} \| {NE: .2f}      |                                                                                       |
+    | <TITLE> Inputs                                                      | -------+-------             | <TITLE> Record:   Model:                                                              |
+    | Left Stick: ({lx: .2f}, {ly: .2f})                                  | {RIGHT: .2f} \| {LEFT: .2f} | @[button, red, circle, {record}]     @[button, grey, circle, {photogramPicture}]      |  // space " " for negative sign
+    | Right Stick: ({rx: .2f}, {ry: .2f})                                 | -------+-------             | @[button, white, circle, {picture}]  @[button, white, square, {record}]               |
+    | Triggers: ({lt: .2f}, {rt: .2f})                                    | {SW: .2f} \| {SE: .2f}      |                                                                                       |
+    | Hat: {hat}                                                          | Arm: {ARM: .2f}             |                                                                                       |
+    | Buttons: {buttons}                                                  |                             |                                                                                       |[invisible=true, buffer=10]
+}
+
+    =BACKUP=: {  // Window 2
+    background = black
+    | BACKUP CAMERA                     |
+    | :---                              |
+    | {$(mainCamera, (1020, 720), -90)} |[invisible=false, buffer=10, border=[color=white, width=2], internal=[color=light_grey, width=3]]
+}
+
+=MAIN=
+=BACKUP=
