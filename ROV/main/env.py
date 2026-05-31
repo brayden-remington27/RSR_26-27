@@ -1,11 +1,7 @@
 import re
 from window import *
 from cmdLine import *
-
-running = True
-
-def quit():
-    running = False
+import config
 
 functions = {  # list of all possible commands and the functions that they activate
     "q": quit,
@@ -18,7 +14,7 @@ functions = {  # list of all possible commands and the functions that they activ
 
 # TODO: have it so that this live updates a script file of all the commands to be called up whenever
 
-while running:
+while config.running:  # have it be a shared variable
     inp = input("[Surface@ROV] > ").strip()  # remove leading and trailing whitespace
     if not inp:
         continue  # continue if no input
@@ -26,9 +22,7 @@ while running:
     # split the first from the rest
     tokens = inp.split(maxsplit=1)
     cmd = tokens[0]  # the first is the command
-    params = tokens[1].split() if len(tokens) > 1 else None
-    
-    #print(inp, "///", cmd, ":", params)
+    params = tokens[1].split() if len(tokens) > 1 else []
     
     
     
@@ -37,4 +31,8 @@ while running:
     if run:
         run(params)  # run that function
     else:
-        print(f"Error: Unknown command '{cmd}'")  # unknown comamnd
+        print(f"! Unknown command '{cmd}' !")  # unknown comamnd
+
+
+#if __name__ == "main":
+    
