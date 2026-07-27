@@ -1,0 +1,19 @@
+{
+    "controller": {
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "hat",
+                "type": "tupe"
+            },
+            {
+                "name": "lt",
+                "type": "float"
+            },
+            {
+                "name": "rt",
+                "type": "float"
+            }
+        ]
+    }
+}
