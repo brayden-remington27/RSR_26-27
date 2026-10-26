@@ -2,39 +2,29 @@ import pygame
 import sys
 from node import Node
 
-# Initialize Pygame
+
 pygame.init()
+
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
-# 1. Enable window resizing using the pygame.RESIZABLE flag
+BG_COLOR = (30, 40, 50)
+
+
+test = Node("Testingasdfghjkl;'werghbfdertghfdr5678ikmnbvcx[m,kuytf]", (50,50), (100, 110, 130), [4, 5])
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
-# Create object
-player = Node(100, 300)
-
 running = True
 while running:
-    # 2. Get current surface dimension on every tick (handles live resize updates)
-    current_w, current_h = screen.get_size()
     
-    screen.fill((240, 240, 240))
+    screen.fill(BG_COLOR)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            
-        # 3. Allow engine to register structural size switches gracefully
-        elif event.type == pygame.VIDEORESIZE:
-            screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            
-        # Pass clicks down to our object
-        player.handle_event(event)
-
-    # Manage movement updates and boundary checking
-    player.update_position(current_w, current_h)
     
-    player.draw(screen)
-    
+    test.draw(screen)
+        
     pygame.display.flip()
     clock.tick(60)
 
