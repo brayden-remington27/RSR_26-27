@@ -9,22 +9,25 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 BG_COLOR = (30, 40, 50)
 
 
-test = Node("Testingasdfghjkl;'werghbfdertghfdr5678ikmnbvcx[m,kuytf]", (50,50), (100, 110, 130), [4, 5])
+test = Node("Testingasdfghjkl;'werghbfdertghfdr5678ikmnbvcx[m,kuytf]", (50,50), (100, 110, 130), [7, 3])
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+node_editor = pygame.Surface((800, 600))  # scrollable surface on to which all the nodes and lines are drawn
 clock = pygame.time.Clock()
 
 running = True
 while running:
     
-    screen.fill(BG_COLOR)
+    node_editor.fill(BG_COLOR)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     
-    test.draw(screen)
-        
+    test.draw(node_editor)
+    
+    offset = (0,0)  # TODO: make it scrollable and bigger/longer than the actual screen (adaptable as needed?)
+    screen.blit(node_editor, offset)
     pygame.display.flip()
     clock.tick(60)
 
