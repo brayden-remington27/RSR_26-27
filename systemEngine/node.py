@@ -1,4 +1,5 @@
 import pygame
+from UIElement import Widget
 
 LINE_WIDTH = 3
 CORNER_RADIUS = 4
