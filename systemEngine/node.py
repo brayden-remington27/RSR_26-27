@@ -9,7 +9,7 @@ IO_PORTS_RADIUS = 10
 GRAY = (140,140,140)
 DARK_GRAY = (140,140,140)
 
-class Node:
+class Node(Widget):
     def __init__(self, name: str, initPos: tuple[int,int], cTheme: tuple[int,int,int], IO: list[int,int]=[0,0]):
         self.name = name
         self.cTheme = cTheme
@@ -27,22 +27,28 @@ class Node:
         # generate main body bounding box
         self.rect = pygame.Rect(self.initPos[0], self.initPos[1], self.size[0], self.size[1])
         
+        super().__init__(
+            self.rect,
+            clickable=False,
+            draggable=True
+        )
+        
         ### Generates the center points for the connection nodes
-        # Input Circle Nodes
-        self.inPortBoxes = [
-            (( self.pos[0] + (self.size[0]/self.IO[0])*(i-0.5) ), self.pos[1]) 
+        # Input Circle Nodes and their offsets relative to the body
+        self.inPortBoxOffsets = [
+            (((self.size[0]/self.IO[0])*(i-0.5) ), 0) 
             for i in range(1, self.IO[0]+1)
         ]
         # Output Circle Nodes
-        self.outPortBoxes = [
-            (( self.pos[0] + (self.size[0]/self.IO[1])*(i-0.5) ), self.pos[1]+self.size[1]) 
+        self.outPortBoxOffsets = [
+            (((self.size[0]/self.IO[1])*(i-0.5) ), self.size[1]) 
             for i in range(1, self.IO[1]+1)
         ]
         
         ### Colors
         # border is themeColor-30, wrapped. somehow this works cuz python wraps -1 to 255 with %. nice.
         self.cFill = cTheme
-        self.cBorder = tuple([((c - 30) % 256) for c in cTheme]) 
+        self.cBorder = tuple([((c - 30) % 256) for c in cTheme])
         
     def draw(self, surface):
         # main body
@@ -54,8 +60,8 @@ class Node:
         surface.blit(self.text_surface, text_rect)
         
         # draw the ports circles
-        for i in self.inPortBoxes: pygame.draw.circle(surface, GRAY, i, IO_PORTS_RADIUS)  # input fill
-        for i in self.outPortBoxes: pygame.draw.circle(surface, GRAY, i, IO_PORTS_RADIUS)  # output fill
+        for i in self.inPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # input fill
+        for i in self.outPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # output fill
     
     def move(self):
         pass

@@ -2,6 +2,10 @@ import pygame
 import sys
 from node import Node
 
+# To-Do List:
+# TODO: standardize all camelcase and snakecase to only snake case for convention's sake
+# TODO: write function/class descriptors
+# TODO: improve readability and understandability of comments
 
 pygame.init()
 
@@ -23,6 +27,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        
+        test.handleEvent(event)
     
     test.draw(node_editor)
     
