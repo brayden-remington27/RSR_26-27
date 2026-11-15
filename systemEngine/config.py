@@ -11,4 +11,4 @@ GRAY = (140,140,140)
 DARK_GRAY = (140,140,140)
 
 
-CURRENT_SAVE = "objects.pkl"
+CURRENT_SAVE = "saves/save.json"

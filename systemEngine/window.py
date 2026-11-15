@@ -1,6 +1,7 @@
 import pygame
 import sys
-import pickle
+import json
+import os
 from config import *
 from node import Node
 from button import Button
@@ -24,8 +25,26 @@ def addNode():
     nodes.append(Node(name, (50,50), (r,g,b), [inps, outs]))
 
 def save():
-    with open(CURRENT_SAVE, "wb") as file:
-        pickle.dump(nodes, file)
+    dataNodes = {
+        "nodes": [
+            {
+                "name": node.name,
+                "rect": tuple(node.rect),
+                "color": node.color,
+                "IO": node.IO
+            }
+        for node in nodes
+        ]
+    }
+    
+    with open(CURRENT_SAVE, "w", encoding="utf-8") as file:  # push to the file
+        json.dump(dataNodes, file, indent=4)
+    
+    print("saved")
+
+def load():
+    with open(CURRENT_SAVE, "r", encoding="utf-8") as file:
+        data = json.load(file)
 
 # def regester():
 #     print("regestered")
@@ -55,9 +74,11 @@ while running:
         else:
             for i in reversed(nodes): i.handleEvent(event)
         makeNode.handleEvent(event)
+        saveConfig.handleEvent(event)
     
     for i in reversed(nodes): i.draw(canvas)  # first on top
     makeNode.draw(canvas)
+    saveConfig.draw(canvas)
     
     offset = (0,0)  # TODO: make it scrollable and bigger/longer than the actual screen (adaptable as needed?)
     screen.blit(canvas, offset)
