@@ -7,6 +7,18 @@ from node import Node
 # TODO: write function/class descriptors
 # TODO: improve readability and understandability of comments
 
+nodes = []
+def addNode():
+    name = input("name: ")
+    r = int(input("red: "))
+    g = int(input("green: "))
+    b = int(input("blue: "))
+    inps = int(input("ins: "))
+    outs = int(input("outs: "))
+    
+    nodes.append(Node(name, (50,50), (r,g,b), [inps, outs]))
+
+
 pygame.init()
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600

@@ -1,16 +1,23 @@
 import pygame
+from config import *
 
 class Widget:
-    def __init__(self, box: pygame.Rect, clickable, draggable):
+    def __init__(self, box: pygame.Rect, color, clickable, draggable):
         self.box = box
         self.clickable = clickable
         self.draggable = draggable
+        self.color = color
         
         # states
         self.hovering = False
         # self.clicking = False
         self.dragging = False
         self.dragOffset = (0,0)
+        
+        ### Colors
+        # border is themeColor-30, wrapped. somehow this works cuz python wraps -1 to 255 with %. nice.
+        self.cFill = self.color
+        self.cBorder = tuple([((c - 30) % 256) for c in self.color])
     
     def handleEvent(self, event):  # takes given event from pygame input loop to process it for any 
         # if event:
@@ -42,5 +49,7 @@ class Widget:
         pass
     
     # TODO: evaluate if a universal drawing function is more effective or if I should leave it to the subclasses
-    def draw(self):
-        pass
+    def draw(self, surface, cFill, cBorder):
+        # main body
+        pygame.draw.rect(surface, cFill, self.rect, border_radius=CORNER_RADIUS)  # fill
+        pygame.draw.rect(surface, cBorder, self.rect, width=LINE_WIDTH, border_radius=CORNER_RADIUS)  # border
