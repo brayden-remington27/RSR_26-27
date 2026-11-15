@@ -2,9 +2,9 @@ import pygame
 from config import *
 
 class Widget:
-    def __init__(self, box: pygame.Rect, color, clickable, draggable):
+    def __init__(self, box: pygame.Rect, color, clickable: tuple[bool,bool], draggable):
         self.box = box
-        self.clickable = clickable
+        self.clickable = clickable  # left/right clickable
         self.draggable = draggable
         self.color = color
         
@@ -30,8 +30,8 @@ class Widget:
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):  # not checking hovering to make sure -- mousedown can regester before motion
-                if event.button == 1:
-                    if self.clickable:
+                if event.button == 1:  # left click
+                    if self.clickable[0]:
                         #print("regestered")
                         self.clicked() # use the button functionality
                     if self.draggable:
@@ -40,12 +40,18 @@ class Widget:
                         self.box.x - event.pos[0],  # make the updates from the mouse
                         self.box.y - event.pos[1]
                     )
+                elif event.button == 3:  # right click (3)
+                    if self.clickable[1]:
+                        self.rClicked()
         
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1 and self.dragging:
                 self.dragging = False
     
     def clicked(self):
+        pass
+    
+    def rClicked(self):
         pass
     
     # TODO: evaluate if a universal drawing function is more effective or if I should leave it to the subclasses

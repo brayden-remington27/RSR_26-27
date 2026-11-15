@@ -13,7 +13,6 @@ from button import Button
 
 pygame.init()
 
-nodes = [Node("Testing", (50,50), (100, 110, 130), [2, 3])]
 def addNode():
     name = input("name: ")
     r = int(input("red: "))
@@ -24,16 +23,22 @@ def addNode():
     
     nodes.append(Node(name, (50,50), (r,g,b), [inps, outs]))
 
+def delNode(node):
+    print("deleting")
+    if node in nodes:  # makes sure the one to delete is there
+        nodes.remove(node)
+
 def save():
-    dataNodes = {
+    dataNodes = {  # create a dictionary/json with all the relavent data to make nodes, cuz pickle doesn't want to store pygame stuff
         "nodes": [
             {
-                "name": node.name,
-                "rect": tuple(node.rect),
-                "color": node.color,
-                "IO": node.IO
+                "ID": i,
+                "name": nodes[i].name,
+                "rect": tuple(nodes[i].rect),
+                "color": nodes[i].color,
+                "IO": nodes[i].IO
             }
-        for node in nodes
+        for i in range(len(nodes))
         ]
     }
     
@@ -42,10 +47,22 @@ def save():
     
     print("saved")
 
-def load():
-    with open(CURRENT_SAVE, "r", encoding="utf-8") as file:
-        data = json.load(file)
-
+def load():  # load nodes from the save
+    global nodes  # make sure to reference the global one
+    
+    if os.path.exists(CURRENT_SAVE):
+        with open(CURRENT_SAVE, "r", encoding="utf-8") as file:
+            data = json.load(file)
+        nodes = [
+                Node(node["name"], pygame.Rect(node["rect"]), node["color"], node["IO"], delNode)
+                for node in data["nodes"]
+            ]
+        
+    else:
+        nodes = [Node("Testing", (50,50), (100, 110, 130), [2, 3])]
+    
+    
+    
 # def regester():
 #     print("regestered")
 
@@ -56,6 +73,8 @@ saveConfig = Button("save", pygame.Rect(570,500,50,50), (230, 100, 100), callbac
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 canvas = pygame.Surface((800, 600))  # scrollable surface on to which all the nodes and lines are drawn
 clock = pygame.time.Clock()
+
+load()  # get data from the save file
 
 running = True
 while running:
