@@ -31,8 +31,8 @@ class Widget:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):  # not checking hovering to make sure -- mousedown can regester before motion
                 if event.button == 1:
-                    #print("regestered")
                     if self.clickable:
+                        #print("regestered")
                         self.clicked() # use the button functionality
                     if self.draggable:
                         self.dragging = True

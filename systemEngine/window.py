@@ -1,13 +1,18 @@
 import pygame
 import sys
+import pickle
+from config import *
 from node import Node
+from button import Button
 
 # To-Do List:
 # TODO: standardize all camelcase and snakecase to only snake case for convention's sake
 # TODO: write function/class descriptors
 # TODO: improve readability and understandability of comments
 
-nodes = []
+pygame.init()
+
+nodes = [Node("Testing", (50,50), (100, 110, 130), [2, 3])]
 def addNode():
     name = input("name: ")
     r = int(input("red: "))
@@ -18,34 +23,44 @@ def addNode():
     
     nodes.append(Node(name, (50,50), (r,g,b), [inps, outs]))
 
+def save():
+    with open(CURRENT_SAVE, "wb") as file:
+        pickle.dump(nodes, file)
 
-pygame.init()
-
-SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
-BG_COLOR = (30, 40, 50)
+# def regester():
+#     print("regestered")
 
 
-test = Node("Testingasdfghjkl;'werghbfdertghfdr5678ikmnbvcx[m,kuytf]", (50,50), (100, 110, 130), [7, 3])
+makeNode = Button("make", pygame.Rect(500,500,50,50), (100, 230, 100), callback=addNode)
+saveConfig = Button("save", pygame.Rect(570,500,50,50), (230, 100, 100), callback=save)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
-node_editor = pygame.Surface((800, 600))  # scrollable surface on to which all the nodes and lines are drawn
+canvas = pygame.Surface((800, 600))  # scrollable surface on to which all the nodes and lines are drawn
 clock = pygame.time.Clock()
 
 running = True
 while running:
     
-    node_editor.fill(BG_COLOR)
+    canvas.fill(CANVAS_COLOR)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         
-        test.handleEvent(event)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for i in nodes:  # nodes[0] is drawn last, its on top
+                if i.rect.collidepoint(event.pos):  # goes through the list to only select the top one if multiple are on top of eachother
+                    i.handleEvent(event)
+                    break  # makes sure to only look at the topmost one
+        else:
+            for i in reversed(nodes): i.handleEvent(event)
+        makeNode.handleEvent(event)
     
-    test.draw(node_editor)
+    for i in reversed(nodes): i.draw(canvas)  # first on top
+    makeNode.draw(canvas)
     
     offset = (0,0)  # TODO: make it scrollable and bigger/longer than the actual screen (adaptable as needed?)
-    screen.blit(node_editor, offset)
+    screen.blit(canvas, offset)
     pygame.display.flip()
     clock.tick(60)
 

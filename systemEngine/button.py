@@ -3,22 +3,26 @@ from UIElement import Widget
 from config import *
 
 class Button(Widget):
-    def __init__(self, name: str, initPos: tuple[int,int], color: tuple[int,int,int]):
+    def __init__(self, name: str, rect: pygame.Rect, color: tuple[int,int,int], callback=None):
+        
         self.name = name
-        self.initPos = initPos
-        
-        # generate font and text
-        self.font = pygame.font.SysFont("Arial", 16)
-        self.text_surface = self.font.render(self.name, True, (255, 255, 255))
-        
-        # generate poition and size from text size and initPos
-        self.size = [self.text_surface.get_width()+EDGE_BUFFER[0], self.text_surface.get_height()+EDGE_BUFFER[1]]
-        # generate main body bounding box
-        self.rect = pygame.Rect(self.initPos[0], self.initPos[1], self.size[0], self.size[1])
+        self.callback = callback
+        self.rect = rect
         
         super().__init__(
             self.rect,
             color,
-            clickable=False,
-            draggable=True
+            clickable=True,
+            draggable=False
         )
+        
+        self.cFill = self.color
+        self.cBorder = tuple([((c - 30) % 256) for c in self.color])
+        
+    def clicked(self):
+        #print("callbacked")
+        if self.callback:
+            self.callback()
+    
+    def draw(self, surface):
+        super().draw(surface, self.cFill, self.cBorder)

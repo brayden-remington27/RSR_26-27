@@ -37,11 +37,11 @@ class Node(Widget):
         ]
         
     def draw(self, surface):
+        # draw the ports circles
+        for i in self.inPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # input fill
+        for i in self.outPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # output fill
+        
         super().draw(surface, self.cFill, self.cBorder)
         # text label/title
         text_rect = self.text_surface.get_rect(center=self.rect.center)
         surface.blit(self.text_surface, text_rect)
-        
-        # draw the ports circles
-        for i in self.inPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # input fill
-        for i in self.outPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # output fill
