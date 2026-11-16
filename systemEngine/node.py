@@ -1,5 +1,6 @@
 import pygame
 from UIElement import Widget
+#from port import Port
 from config import *
 
 class Node(Widget):
@@ -25,8 +26,13 @@ class Node(Widget):
             draggable=True
         )
         
-        ### Generates the center points for the connection nodes
-        # Input Circle Nodes and their offsets relative to the body
+        
+        
+        #for i in range(1, self.IO[0]+1):
+            
+        #for i in range(1, self.IO[1]+1):
+            
+        
         self.inPortBoxOffsets = [
             (((self.size[0]/self.IO[0])*(i-0.5) ), 0) 
             for i in range(1, self.IO[0]+1)
