@@ -5,6 +5,8 @@ import os
 from config import *
 from node import Node
 from button import Button
+from port import inPort, outPort
+from line import Line
 
 # To-Do List:
 # TODO: standardize all camelcase and snakecase to only snake case for convention's sake
@@ -12,6 +14,15 @@ from button import Button
 # TODO: improve readability and understandability of comments
 
 pygame.init()
+nodes = []
+lines = []
+
+drawing = False
+def drawConnection(port):
+    if type(port) == outPort:  # don't allow draw if starting from an output
+        return  # TODO: allow bidirectional connection drawing
+    else:
+        drawing = True
 
 def addNode():
     name = input("name: ")
@@ -54,15 +65,14 @@ def load():  # load nodes from the save
         with open(CURRENT_SAVE, "r", encoding="utf-8") as file:
             data = json.load(file)
         nodes = [
-                Node(node["name"], pygame.Rect(node["rect"]), node["color"], node["IO"], delNode)
+                Node(node["name"], pygame.Rect(node["rect"]), node["color"], node["IO"], delCallback=delNode, portCallback=drawConnection)
                 for node in data["nodes"]
             ]
         
     else:
-        nodes = [Node("Testing", (50,50), (100, 110, 130), [2, 3])]
-    
-    
-    
+        nodes = [Node("Testing", (50,50), (100, 110, 130), [2, 3], delCallback=delNode, portCallback=drawConnection)]
+
+
 # def regester():
 #     print("regestered")
 

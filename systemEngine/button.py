@@ -12,7 +12,7 @@ class Button(Widget):
         super().__init__(
             self.rect,
             color,
-            clickable=[True, False],
+            clickable=(True, False),
             draggable=False
         )
         

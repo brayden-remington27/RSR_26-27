@@ -58,4 +58,4 @@ class Widget:
     def draw(self, surface, cFill, cBorder):
         # main body
         pygame.draw.rect(surface, cFill, self.rect, border_radius=CORNER_RADIUS)  # fill
-        pygame.draw.rect(surface, cBorder, self.rect, width=LINE_WIDTH, border_radius=CORNER_RADIUS)  # border
+        pygame.draw.rect(surface, cBorder, self.rect, width=BORDER_WIDTH, border_radius=CORNER_RADIUS)  # border

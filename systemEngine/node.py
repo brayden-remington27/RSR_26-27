@@ -1,14 +1,14 @@
 import pygame
 from UIElement import Widget
-#from port import Port
+from port import inPort, outPort
 from config import *
 
 class Node(Widget):
-    def __init__(self, name: str, initPos: tuple[int,int], color: tuple[int,int,int], IO: list[int,int]=[0,0], callback=None):
+    def __init__(self, name: str, initPos: tuple[int,int], color: tuple[int,int,int], IO: list[int,int]=[0,0], delCallback=None, portCallback=None):
         self.name = name
         self.initPos = initPos
         self.IO = IO
-        self.callback = callback
+        self.delCallback = delCallback
         
         # generate font and text
         self.font = pygame.font.SysFont("Arial", 16)
@@ -22,36 +22,29 @@ class Node(Widget):
         super().__init__(
             self.rect,
             color,
-            clickable=[False,True],
+            clickable=(False,True),
             draggable=True
         )
         
         
+        self.ports = []
+        for i in range(1, self.IO[0]+1):  # input ports
+            self.ports.append(inPort((((self.size[0]/self.IO[0])*(i-0.5) ), 0), callback=portCallback))
+        for i in range(1, self.IO[1]+1):  # output ports
+            self.ports.append(outPort((((self.size[0]/self.IO[1])*(i-0.5) ), self.size[1]), callback=portCallback))
         
-        #for i in range(1, self.IO[0]+1):
-            
-        #for i in range(1, self.IO[1]+1):
-            
         
-        self.inPortBoxOffsets = [
-            (((self.size[0]/self.IO[0])*(i-0.5) ), 0) 
-            for i in range(1, self.IO[0]+1)
-        ]
-        # Output Circle Nodes
-        self.outPortBoxOffsets = [
-            (((self.size[0]/self.IO[1])*(i-0.5) ), self.size[1]) 
-            for i in range(1, self.IO[1]+1)
-        ]
-    
+        
     def rClicked(self):
-        #print("callbacked")
-        if self.callback:
-            self.callback(self)  # passes itself into the delNode function
+        #print("delCallbacked")
+        if self.delCallback:
+            self.delCallback(self)  # passes itself into the delNode function
     
     def draw(self, surface):
         # draw the ports circles
-        for i in self.inPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # input fill
-        for i in self.outPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # output fill
+        # for i in self.inPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # input fill
+        # for i in self.outPortBoxOffsets: pygame.draw.circle(surface, GRAY, (self.rect.x+i[0], self.rect.y+i[1]), IO_PORTS_RADIUS)  # output fill
+        for i in self.ports: i.draw(surface)
         
         super().draw(surface, self.cFill, self.cBorder)
         # text label/title
