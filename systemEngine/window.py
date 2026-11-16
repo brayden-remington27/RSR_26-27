@@ -6,7 +6,7 @@ from config import *
 from node import Node
 from button import Button
 from port import inPort, outPort
-from line import Line
+#from line import Line
 
 # To-Do List:
 # TODO: standardize all camelcase and snakecase to only snake case for convention's sake
