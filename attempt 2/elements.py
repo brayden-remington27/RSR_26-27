@@ -44,23 +44,23 @@ class Element:
     def update(self):
         pass
     
-    def draw(self, surface: pygame.Surface, fill: tuple[int,int,int], border: tuple[float,tuple[int,int,int]] = (0,(0,0,0)), radius: float=0):
+    def draw(self, surface: pygame.Surface, fill: tuple[int,int,int], border: tuple[int,tuple[int,int,int]] = (0,(0,0,0)), radius: int=0):
         pygame.draw.rect(surface, fill, self.box, border_radius=radius)  # fill
         if border[0]:  # if there's a border
             pygame.draw.rect(surface, border[1], self.box, width=border[0], border_radius=radius)  # border
     
 class Node(Element):
-    def __init__(self, title: str, pos: tuple[int,int], color: tuple[int,int,int]):
+    def __init__(self, title: str, pos: tuple[int,int], color: tuple[int,int,int], nIO: tuple[int,int] = [0,0]):
         self.title = title
-        self.pos = pos
         self.color = color
+        self.nIO = nIO  # mostly needed for external reference
         
         self.text_surface = FONT.render(self.title, ANTIALIAS, TEXT_COLOR)
         
         # automatically define size from the text size
-        self.size = (self.text_surface.get_width()+TEXT_BUFFER[0], self.text_surface.get_height()+TEXT_BUFFER[1])
+        size = (self.text_surface.get_width()+TEXT_BUFFER[0], self.text_surface.get_height()+TEXT_BUFFER[1])  # not needed beyond box init nor pos
         
-        super().__init__(pygame.Rect(self.pos, self.size))
+        super().__init__(pygame.Rect(pos, size))
 
 
         self.b_color = tuple([((c - 30) % 256) for c in self.color])  # loops back around
@@ -73,15 +73,32 @@ class Node(Element):
         if self.L_clicked:
             self.box.center = pygame.mouse.get_pos()
 
+class Button(Element):
+    def __init__(self, box: pygame.Rect, color: tuple[int,int,int], callback=None):
+        super().__init__(box)
+        
+        self.callback = callback
+        self.color = color
+    
+    def draw(self, surface):
+        super().draw(surface, self.color)
+    
+    def L_clicking(self):  # run the assigned function
+        if self.callback:
+            self.callback()
+
 # class Port(Element):
-#     def __init__(self, pos):
-#         super().__init__(pos)
+#     def __init__(self, box: pygame.Rect):
+#         super().__init__(box)
 
 # class Menu(Element):
-#     def __init__(self, pos):
-#         super().__init__(pos)
+#     def __init__(self, box: pygame.Rect):
+#         super().__init__(box)
 
 class Line:  #(Element):
     def __init__(self, p1: tuple[int,int], p2: tuple[int,int]):
         self.p1 = p1
         self.p2 = p2
+    
+    def draw(self, surface):
+        pygame.draw.line(surface, LINE_COLOR, self.p1, self.p2, LINE_WIDTH)
