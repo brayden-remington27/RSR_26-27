@@ -74,14 +74,19 @@ class Node(Element):
             self.box.center = pygame.mouse.get_pos()
 
 class Button(Element):
-    def __init__(self, box: pygame.Rect, color: tuple[int,int,int], callback=None):
+    def __init__(self, box: pygame.Rect, color: tuple[int,int,int], title: str=None, callback=None):
         super().__init__(box)
         
         self.callback = callback
         self.color = color
+        self.title = title
+        
+        self.text_surface = FONT.render(self.title, ANTIALIAS, TEXT_COLOR)
     
     def draw(self, surface):
         super().draw(surface, self.color)
+        if self.title:
+            surface.blit(self.text_surface, self.text_surface.get_rect(center=self.box.center))  # title
     
     def L_clicking(self):  # run the assigned function
         if self.callback:
@@ -95,10 +100,10 @@ class Button(Element):
 #     def __init__(self, box: pygame.Rect):
 #         super().__init__(box)
 
-class Line:  #(Element):
+class Wire:  #(Element):
     def __init__(self, p1: tuple[int,int], p2: tuple[int,int]):
         self.p1 = p1
         self.p2 = p2
     
     def draw(self, surface):
-        pygame.draw.line(surface, LINE_COLOR, self.p1, self.p2, LINE_WIDTH)
+        pygame.draw.line(surface, WIRE_COLOR, self.p1, self.p2, WIRE_WIDTH)
